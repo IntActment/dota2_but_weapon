@@ -1,6 +1,15 @@
 // Units File
 "DOTAUnits"
 {
+	"npc_dota_creature_building_parent"	
+	{
+		"BaseClass"					"npc_dota_base"
+		
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_NONE"			// Type of locomotion - ground, air
+		"MovementSpeed"				"0"			// Speed
+		"MovementTurnRate"			"0.0"			// Turning rate.
+	}
+	
 	// Outpost modifier_watch_tower
 
 	"npc_dota_watch_tower" {

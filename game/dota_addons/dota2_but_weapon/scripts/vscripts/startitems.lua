@@ -8,9 +8,11 @@ local startitems = {
 local bonusabilities = {
 	-- exampleability = { lvl = 1, cd = 120 , nokey = true, hidden = true, cast = true },
 	-- roshan_spell_block = { lvl = 4, nokey = true },
+	grabnpcability = { ability3 = true },
+	tossnpcability = { hidden = true }
 }
 local bonusmodifier = {
-	examplemodifier = {duration = 5},
+	--examplemodifier = {duration = 5},
 	-- examplemodifier = {},
 }
 local talents = {
@@ -21,9 +23,13 @@ local talents = {
 	-- [2] = "",	[1] = "special_bonus_exampletalent",
 }
 
-ListenToGameEvent("npc_first_spawn",function(kv)
-	local hero = EntIndexToHScript(kv.entindex)
+if last_npc_first_spawn ~= nil then
+	local ret = StopListeningToGameEvent (last_npc_first_spawn)
+	print ("re-register npc_first_spawn event: " .. tostring(ret))
+end
 
+last_npc_first_spawn = ListenToGameEvent("npc_first_spawn", function(keys)
+	local hero = EntIndexToHScript(keys.entindex)
 
 	if (not hero:IsHero()) then return end
 

@@ -1,6 +1,92 @@
 // Dota Heroes File
 "DOTAAbilities"
 {
+	"grabnpcability"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"abilities/grabnpcability"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_NONE"
+		"AbilityCastPoint"				"0.25"
+		"FightRecapLevel"				"1"
+		"AbilityCooldown"				"35.0 30.0 25.0 20.0"
+		"AbilityManaCost"				"50"
+		"AbilityTextureName"			"custom_grabnpcability"
+		"MaxLevel"						"4"							// Maximum skillable level
+		"AbilitySpecial"											
+		{
+			// filling in some values with some names
+			// the values can be shown inside the Tooltip if you edit game/resource/addon_english.txt
+			"01"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"duration"					"3.8 4.6 5.4 6.2"
+			}
+			"02"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"move_slow_rate"			"45.0 35.0 25.0 15.0"
+			}
+			"03"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"turn_rate"					"40.0 30.0 20.0 10.0"
+			}
+			"04"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"grab_rad"					"100.0 150.0 200.0 250.0"
+			}
+			"05"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"duration_ally"				"30.0"
+			}
+			"06"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"cleave_rad"				"200.0 250.0 300.0 350.0"
+			}
+			"07"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"cleave_percentage"			"30.0 35.0 40.0 45.0"
+			}
+			"08"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"stack_limit"				"3 5 7 9"
+			}
+		}
+	}
+	
+	"tossnpcability"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"abilities/tossnpcability"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_ALL"
+		"AbilityCastPoint"				"0.0"
+		"AbilityCooldown"				"0"
+		"AbilityManaCost"				"0"
+		"AbilityTextureName"			"custom_tossnpcability"
+		"MaxLevel"						"4"								// Maximum skillable level
+		"FightRecapLevel"				"1"
+		"AbilitySpecial"											
+		{
+			"01"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"damage"					"50.0 100.0 150.0 200.0"
+			}
+			"02"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"range"						"500.0 650.0 800.0 950.0"
+			}
+		}
+	}
+	
 	"exampleability"
 	{
 		"BaseClass"						"ability_lua"

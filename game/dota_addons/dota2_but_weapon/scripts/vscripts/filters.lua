@@ -44,6 +44,28 @@ function Filters:DamageFilter(event)
 
 	-- --  example
 		-- event.damage = 10
+		
+	if victimUnit:IsBuilding() then
+		if attackerUnit:IsBuilding() then
+			--print( "Towers cannot damege each other" )
+			
+			--Say( victimUnit, "Towers cannot hit each other", false )
+			
+			return false
+		end
+		
+		if attackerUnit:IsControllableByAnyPlayer() and ( victimUnit.canBeDamagedByHero ~= nil ) and ( not victimUnit.canBeDamagedByHero() ) then
+			--print( "this tower cannot be attacked by any controllable unit" )
+			if IsServer() then
+				Say( victimUnit, "Only creeps can hurt me!", false )
+				local nTargetFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_abaddon/abaddon_aphotic_shield_explosion.vpcf", PATTACH_ABSORIGIN_FOLLOW, victimUnit )
+				ParticleManager:SetParticleControlEnt( nTargetFX, 1, victimUnit, PATTACH_ABSORIGIN_FOLLOW, nil, victimUnit:GetCenter(), false )
+				ParticleManager:ReleaseParticleIndex( nTargetFX )
+			end
+			
+			return false
+		end
+	end
 
 	return true
 end
