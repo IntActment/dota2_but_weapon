@@ -35,6 +35,8 @@ function Filters:BountyRunePickupFilter(event)
 	return true
 end
 
+lastSay = Time();
+
 function Filters:DamageFilter(event)
 	-- PrintTable(event)
 	local attackerUnit = event.entindex_attacker_const and EntIndexToHScript(event.entindex_attacker_const)
@@ -57,10 +59,18 @@ function Filters:DamageFilter(event)
 		if attackerUnit:IsControllableByAnyPlayer() and ( victimUnit.canBeDamagedByHero ~= nil ) and ( not victimUnit.canBeDamagedByHero() ) then
 			--print( "this tower cannot be attacked by any controllable unit" )
 			if IsServer() then
-				Say( victimUnit, "Only creeps can hurt me!", false )
-				local nTargetFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_abaddon/abaddon_aphotic_shield_explosion.vpcf", PATTACH_ABSORIGIN_FOLLOW, victimUnit )
-				ParticleManager:SetParticleControlEnt( nTargetFX, 1, victimUnit, PATTACH_ABSORIGIN_FOLLOW, nil, victimUnit:GetCenter(), false )
-				ParticleManager:ReleaseParticleIndex( nTargetFX )
+				if ( not victimUnit:HasModifier( "beinggrabbedmodifier" ) ) and ( not victimUnit:HasModifier( "beingtossedmodifier" ) ) and ( not victimUnit:HasModifier( "getsmackedmodifier" ) ) then
+					
+					local now_time = Time()
+					if now_time - lastSay > 2.0 then
+						lastSay = now_time
+						Say( victimUnit, "Only creeps can hurt me!", false )
+					end
+					
+					local nTargetFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_abaddon/abaddon_aphotic_shield_explosion.vpcf", PATTACH_ABSORIGIN_FOLLOW, victimUnit )
+					ParticleManager:SetParticleControlEnt( nTargetFX, 1, victimUnit, PATTACH_ABSORIGIN_FOLLOW, nil, victimUnit:GetCenter(), false )
+					ParticleManager:ReleaseParticleIndex( nTargetFX )
+				end
 			end
 			
 			return false

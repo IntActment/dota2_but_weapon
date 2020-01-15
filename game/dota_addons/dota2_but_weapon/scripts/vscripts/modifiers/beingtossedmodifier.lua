@@ -101,7 +101,7 @@ function beingtossedmodifier:OnIntervalThink()
 			
 			local damage = {
 				victim = unit,
-				attacker = self:GetCaster(),
+				attacker = grab_target,
 				damage = self.damage,
 				damage_type = DAMAGE_TYPE_PHYSICAL,		
 				ability = self:GetAbility()
@@ -111,6 +111,8 @@ function beingtossedmodifier:OnIntervalThink()
 			
 			damage.victim = grab_target
 			damage.damage = damage.damage / 2
+			damage.attacker = unit
+			
 			ApplyDamage( damage )
 			
 			unit:EmitSound("smash_1")

@@ -13,6 +13,7 @@
 		"AbilityManaCost"				"50"
 		"AbilityTextureName"			"custom_grabnpcability"
 		"MaxLevel"						"4"							// Maximum skillable level
+		"HasScepterUpgrade"				"1"
 		"AbilitySpecial"											
 		{
 			// filling in some values with some names
@@ -50,12 +51,17 @@
 			"07"
 			{
 				"var_type"					"FIELD_FLOAT"
-				"cleave_percentage"			"30.0 35.0 40.0 45.0"
+				"cleave_percentage"			"30.0 40.0 50.0 60.0"
 			}
 			"08"
 			{
 				"var_type"					"FIELD_INTEGER"
 				"stack_limit"				"3 5 7 9"
+			}
+			"08"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"damage_increase"			"1.5 3.0 4.5 6.0"
 			}
 		}
 	}

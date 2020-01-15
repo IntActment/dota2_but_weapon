@@ -33,8 +33,11 @@ function grabmodifier:OnCreated( kv )
 	self.cleave_rad = kv.cl_rad
 	self.cleave_percentage = kv.cl_percentage
 	self.stack_limit = kv.st_limit
+	self.damage_increase = kv.dam_increase
 	
-	self:SetStackCount( self.stack_limit )
+	if not self:GetCaster():HasScepter() then
+		self:SetStackCount( self.stack_limit )
+	end
 	
 	-- remove old grabber state
 	
@@ -73,6 +76,8 @@ end
 
 function grabmodifier:OnDestroy()
 	if IsClient() then return end
+	
+	self:GetCaster():RemoveGesture( self.animation )
 
 	--if self:GetRemainingTime() <= 0 then
 		self:OnExpire()
@@ -109,8 +114,11 @@ function grabmodifier:OnIntervalThink()
 	
 	local caster = self:GetCaster()
 	
-	self.rate = Geom.Lerp(self.rate, 0.05, 0.05)
+	if self:GetCaster():HasScepter() then
+		self:SetStackCount( 0 )
+	end
 	
+	self.rate = Geom.Lerp(self.rate, 0.05, 0.05)	
 
 	local target_qangles = caster:GetAngles()
 	target_qangles[3] = -76.0
@@ -170,7 +178,8 @@ function grabmodifier:OnAttackLanded( params )
 		{
 			"ouch_1",
 			"ouch_2",
-			"ouch_3"
+			"ouch_3",
+			"ouch_4"
 		}
 		
 		self.grab_target:EmitSound(sounds[RandomInt(1, #sounds)])
@@ -182,39 +191,41 @@ function grabmodifier:OnAttack( params )
 	
 	if params.attacker ~= self:GetParent() then return end -- do nothing
 	
-	self:DecrementStackCount()
-	
-	
-	if self:GetStackCount() == 0 then
-	--[[
-		local aimPos = self:GetCursorPosition()
-		local tossStartPos = target:GetOrigin()
-		local caster = self:GetCaster()
+	if not self:GetCaster():HasScepter() then
+		self:DecrementStackCount()
 		
-		local mod = target:AddNewModifier(
-							caster,
-							self,
-							"beingtossedmodifier",
-							{
-								tossPointX = aimPos.x, 
-								tossPointY = aimPos.y, 
-								tossPointZ = aimPos.z,
-								tossFromX = tossStartPos.x, 
-								tossFromY = tossStartPos.y, 
-								tossFromZ = tossStartPos.z,
-								duration = dur,
-								damage = dam,
-								range = ran,
-							}
-		)
 		
-		if mod == nil then
-			print( "failed to add beingtossedmodifier" )
+		if self:GetStackCount() == 0 then
+		--[[
+			local aimPos = self:GetCursorPosition()
+			local tossStartPos = target:GetOrigin()
+			local caster = self:GetCaster()
+			
+			local mod = target:AddNewModifier(
+								caster,
+								self,
+								"beingtossedmodifier",
+								{
+									tossPointX = aimPos.x, 
+									tossPointY = aimPos.y, 
+									tossPointZ = aimPos.z,
+									tossFromX = tossStartPos.x, 
+									tossFromY = tossStartPos.y, 
+									tossFromZ = tossStartPos.z,
+									duration = dur,
+									damage = dam,
+									range = ran,
+								}
+			)
+			
+			if mod == nil then
+				print( "failed to add beingtossedmodifier" )
+			end
+			
+			caster:EmitSound("throw_1")
+			]]--
+			self:Destroy()
 		end
-		
-		caster:EmitSound("throw_1")
-		]]--
-		self:Destroy()
 	end
 end
 
@@ -223,6 +234,7 @@ function grabmodifier:DeclareFunctions()
 	
 	local funcs = {
 		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
+		MODIFIER_PROPERTY_BASEATTACK_BONUSDAMAGE,
 		MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE,
 		MODIFIER_EVENT_ON_ATTACK_LANDED,
 		MODIFIER_EVENT_ON_ATTACK,
@@ -239,4 +251,9 @@ end
 function grabmodifier:GetModifierTurnRate_Percentage( params )
 	if IsClient() then return 0 end
 	return -self.turn_rate
+end
+
+function grabmodifier:GetModifierBaseAttack_BonusDamage( params )
+	if IsClient() then return 0 end
+	return self.grab_target:GetHealth() * self.damage_increase / 100.0
 end

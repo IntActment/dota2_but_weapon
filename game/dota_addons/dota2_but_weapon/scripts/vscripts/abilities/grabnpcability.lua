@@ -67,6 +67,7 @@ function grabnpcability:OnSpellStart()
 	local cleave_rad = self:GetSpecialValueFor( "cleave_rad" )
 	local cleave_percentage = self:GetSpecialValueFor( "cleave_percentage" )
 	local stack_limit = self:GetSpecialValueFor( "stack_limit" )
+	local damage_increase = self:GetSpecialValueFor( "damage_increase" )	
 	
 	-- remove old grabber state
 
@@ -89,7 +90,8 @@ function grabnpcability:OnSpellStart()
 			turn_rate = turn,
 			cl_rad = cleave_rad,
 			cl_percentage = cleave_percentage,
-			st_limit = stack_limit
+			st_limit = stack_limit,
+			dam_increase = damage_increase
 		}
 	)
 end

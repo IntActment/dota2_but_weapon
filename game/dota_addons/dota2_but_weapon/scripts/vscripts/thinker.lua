@@ -36,7 +36,7 @@ local cond_good_t3_mid = function() return killedBuildings["dota_goodguys_tower2
 local cond_good_t3_top = function() return killedBuildings["dota_goodguys_tower2_top"] end
 
 local cond_bad_t2_bot = function() return killedBuildings["dota_badguys_tower1_bot"] end
-local cond_bad_t2_mid = function() print ("checked mid"); return killedBuildings["dota_badguys_tower1_mid"] end
+local cond_bad_t2_mid = function() return killedBuildings["dota_badguys_tower1_mid"] end
 local cond_bad_t2_top = function() return killedBuildings["dota_badguys_tower1_top"] end
 
 local cond_good_t2_bot = function() return killedBuildings["dota_goodguys_tower1_bot"] end
@@ -44,6 +44,13 @@ local cond_good_t2_mid = function() return killedBuildings["dota_goodguys_tower1
 local cond_good_t2_top = function() return killedBuildings["dota_goodguys_tower1_top"] end
 
 local conds = {
+	bad_filler_1 = cond_bad_t4,
+	bad_filler_2 = cond_bad_t4,
+	bad_filler_3 = cond_bad_t4,
+	bad_filler_4 = cond_bad_t4,
+	bad_filler_5 = cond_bad_t4,
+	bad_filler_6 = cond_bad_t4,
+	bad_filler_7 = cond_bad_t4,
 	bad_healer_7 = cond_bad_t4,
 	bad_rax_melee_bot = cond_bad_rax_bot,
 	bad_rax_melee_mid = cond_bad_rax_mid,
@@ -75,6 +82,13 @@ local conds = {
 	dota_goodguys_tower3_top = cond_good_t3_top,
 	dota_goodguys_tower4_bot = cond_good_t4,
 	dota_goodguys_tower4_top = cond_good_t4,
+	good_filler_1 = cond_good_t4,
+	good_filler_2 = cond_good_t4,
+	good_filler_3 = cond_good_t4,
+	good_filler_4 = cond_good_t4,
+	good_filler_5 = cond_good_t4,
+	good_filler_6 = cond_good_t4,
+	good_filler_7 = cond_good_t4,
 	good_healer_6 = cond_good_t4,
 	good_rax_melee_bot = cond_good_rax_bot,
 	good_rax_melee_mid = cond_good_rax_mid,
