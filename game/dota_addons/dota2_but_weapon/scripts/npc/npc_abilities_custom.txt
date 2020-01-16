@@ -56,7 +56,7 @@
 			"08"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"stack_limit"				"3 5 7 9"
+				"stack_limit"				"5 8 11 14"
 			}
 			"08"
 			{
@@ -89,6 +89,117 @@
 			{
 				"var_type"					"FIELD_FLOAT"
 				"range"						"500.0 650.0 800.0 950.0"
+			}
+		}
+	}
+	
+	"pushability_datadriven"
+	{
+		"ID"           				"1102"           // Default ID by Valve is "102"
+		"BaseClass"    				"ability_datadriven"
+		"AbilityTextureName" 		"custom_forcestaff"
+
+		"AbilityCastAnimation"  	"ACT_DOTA_IDLE"
+
+		"AbilityBehavior"       	"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"FightRecapLevel"       	"1"
+
+		"AbilityCastPoint"        	"0.0"
+		"AbilityCooldown"       	"25.0"
+		"MaxLevel"					"1"
+		"AbilityManaCost"       	"15"
+
+		"precache"
+		{
+			"soundfile" "soundevents/game_sounds_items.vsndevts"
+			"soundfile" "soundevents/custom_sounds.vsndevts"
+			"particle"  "particles/items_fx/force_staff.vpcf"
+			"particle"  "particles/status_fx/status_effect_forcestaff.vpcf"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"        "FIELD_INTEGER"
+				"push_length"     "150"
+			}
+			"02"
+			{
+				"var_type"      	"FIELD_INTEGER"
+				"push_speed"    	"1500"
+			}
+			"03"
+			{
+				"var_type"      	"FIELD_FLOAT"
+				"push_duration" 	"0.2"
+			}
+			"04"
+			{
+				"var_type"    		"FIELD_INTEGER"
+				"tree_radius" 		"80"
+			}
+		}
+
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"  "push_1"
+				"Target"  "CASTER"
+			}
+			"ApplyModifier"
+			{
+				"ModifierName"  "modifier_item_force_staff_effect"
+				"Target"  "CASTER"
+			}
+			"RunScript"
+			{
+				"ScriptFile"  "items/item_force_staff.lua"
+				"Function"  "ForceStaff"
+				"Target"  "CASTER"
+			}
+			"ApplyMotionController"
+			{
+					"Target"    "CASTER"
+					"ScriptFile"    "items/item_force_staff.lua"
+					"HorizontalControlFunction" "ForceHorizontal"       
+			}
+		}
+
+		"Modifiers"
+		{
+			"modifier_item_force_staff_effect"
+			{ 
+
+				"Duration"  "%push_duration"
+
+				"OverrideAnimation" "ACT_DOTA_FLAIL"
+
+				"StatusEffectName"     "particles/status_fx/status_effect_forcestaff.vpcf"
+				"StatusEffectPriority"  "10"
+				
+				"OnCreated"
+				{
+					"AttachEffect"
+					{
+						"EffectName"  "particles/items_fx/force_staff.vpcf"
+						"EffectAttachType" "follow_origin"
+						"Target"  "CASTER"
+					}
+				}
+
+				"ThinkInterval"  "0.03"
+				"OnIntervalThink"
+				{
+					"DestroyTrees"
+					{
+						"Target"  "CASTER"
+						"Radius"  "%tree_radius"
+					}
+
+				}
+
 			}
 		}
 	}

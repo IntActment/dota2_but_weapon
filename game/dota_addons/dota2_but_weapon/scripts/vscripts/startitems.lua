@@ -8,8 +8,9 @@ local startitems = {
 local bonusabilities = {
 	-- exampleability = { lvl = 1, cd = 120 , nokey = true, hidden = true, cast = true },
 	-- roshan_spell_block = { lvl = 4, nokey = true },
-	grabnpcability = { ability3 = true },
-	tossnpcability = { hidden = true }
+	pushability_datadriven = { ability4 = true, lvl = 1, nokey = false },
+	grabnpcability = { ability3 = true, nokey = false },
+	tossnpcability = { hidden = true },	
 }
 local bonusmodifier = {
 	--examplemodifier = {duration = 5},
@@ -34,7 +35,7 @@ last_npc_first_spawn = ListenToGameEvent("npc_first_spawn", function(keys)
 	if (not hero:IsHero()) then return end
 
 	-- Abilities
-
+	
 	for abil,kv in pairs(bonusabilities) do
 		if (not kv.nokey) then hero:RemoveAbility("generic_hidden") end
 		local a = hero:AddAbility(abil)
@@ -45,7 +46,6 @@ last_npc_first_spawn = ListenToGameEvent("npc_first_spawn", function(keys)
 	end
 
 	if (not hero:IsRealHero()) then return end
-
 	
 	-- Items
 
