@@ -34,6 +34,10 @@ function grabmodifier:OnCreated( kv )
 	self.cleave_percentage = kv.cl_percentage
 	self.stack_limit = kv.st_limit
 	self.damage_increase = kv.dam_increase
+	self.break_distance = kv.br_distance
+	self.isAlly = ( self.grab_target:GetTeamNumber() == self:GetParent():GetTeamNumber() )
+	
+	self.init_pos = caster:GetAbsOrigin()
 	
 	if not self:GetCaster():HasScepter() then
 		self:SetStackCount( self.stack_limit )
@@ -50,7 +54,7 @@ function grabmodifier:OnCreated( kv )
 						"beinggrabbedmodifier",
 						{
 							duration = kv.duration,
-							ally = (self:GetCaster():GetTeamNumber() == self.grab_target:GetTeamNumber())
+							ally = self.isAlly
 						}
 	)
 	
@@ -112,7 +116,18 @@ end
 function grabmodifier:OnIntervalThink()
 	if IsClient() then return end
 	
-	local caster = self:GetCaster()
+	local caster = self:GetCaster()	
+	
+	-- allowed only for ally units except buildings
+	if not self.isAlly or self.grab_target:IsBuilding() then
+		-- check for TP abuse
+		if ( self.init_pos - caster:GetAbsOrigin() ):Length2D() > self.break_distance then
+			print( "cancel grabbing" )
+			self:Destroy()
+			
+			return
+		end
+	end
 	
 	if self:GetCaster():HasScepter() then
 		self:SetStackCount( 0 )
@@ -128,11 +143,13 @@ function grabmodifier:OnIntervalThink()
 	target_qangles[2] = weaponAngles[2] - 90
 	target_qangles[3] = weaponAngles[3]
 	
-	local newOrigin = SplineVectors( caster:GetAttachmentOrigin( self.weapon ), self.grab_target:GetOrigin(), self.rate ) --   + self.grab_target:GetOrigin() - self.grab_target:GetCenter()
+	local newOrigin = SplineVectors( caster:GetAttachmentOrigin( self.weapon ), self.grab_target:GetOrigin(), self.rate )
 	
 	self.grab_target:SetOrigin( newOrigin )
 	self.grab_target:SetAngles( target_qangles[1], target_qangles[2], target_qangles[3] )
 
+	-- refresh last position value
+	self.init_pos = caster:GetAbsOrigin()
 end
 
 function grabmodifier:OnAttackLanded( params )

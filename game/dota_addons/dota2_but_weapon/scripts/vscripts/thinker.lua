@@ -120,29 +120,6 @@ function Thinker:Minute00()
 	
 	FillTowerKillConds()
 
---[[
-	local hBuildings = FindUnitsInRadius(DOTA_TEAM_NOTEAM,
-					  Vector(0, 0, 0),
-					  nil,
-					  FIND_UNITS_EVERYWHERE,
-					  DOTA_UNIT_TARGET_TEAM_BOTH,
-					  DOTA_UNIT_TARGET_BUILDING,
-					  DOTA_UNIT_TARGET_FLAG_INVULNERABLE,
-					  FIND_ANY_ORDER,
-					  false)
-
-	for _,hBuilding in pairs(hBuildings) do
-		if hBuilding:IsTower() or hBuilding:IsBarracks() or hBuilding:IsShrine() or string.match(hBuilding:GetName(), "healer") then
-		
-			print(hBuilding:GetName())
-			hBuilding:SetInvulnCount( 0 )
-			
-			hBuilding.isInvul = true
-			
-		end
-	end
-	]]--
-
 	return nil -- does not repeat
 end
 

@@ -30,31 +30,27 @@ function getsmackedmodifier:OnCreated( kv )
 	self.grab_target:StartGestureWithPlaybackRate( ACT_DOTA_DIE, 1.0 )
 	
 	self.grab_target:EmitSound("drop_1")
-	
-	--self:StartIntervalThink( 1.2 )
+
 end
 
 function getsmackedmodifier:OnRefresh( kv )
-	if IsClient() then return end
+	if IsClient() then return end	
 	
+	self.stunned = true
+	self.grab_target = self:GetParent()
 	
+	self:SetDuration( 2.5, false )
+	
+	self.grab_target:RemoveGesture( ACT_DOTA_FLAIL )
+	self.grab_target:StartGestureWithPlaybackRate( ACT_DOTA_DIE, 1.0 )
+	
+	self.grab_target:EmitSound("drop_1")
 end
 
 function getsmackedmodifier:OnDestroy()
 	if IsClient() then return end
 	
 	self.grab_target:RemoveGesture( ACT_DOTA_DIE )
-	
-end
-
-function getsmackedmodifier:OnIntervalThink()
-	if IsClient() then return end
-	
-	self:StartIntervalThink( -1 )
-	
-	self.grab_target:RemoveGesture( ACT_DOTA_FLAIL )
-	self.stunned = false
-	self.grab_target:StartGestureWithPlaybackRate( ACT_DOTA_DIE, 1.5 )
 	
 end
 
