@@ -41,6 +41,8 @@ function tossnpcability:OnSpellStart()
 		
 		local tossStartPos = target:GetOrigin()
 		
+		target:Interrupt()
+		
 		local mod = target:AddNewModifier(
 							caster,
 							self,

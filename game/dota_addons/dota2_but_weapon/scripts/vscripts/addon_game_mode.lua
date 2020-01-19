@@ -2,7 +2,7 @@
 _G.ADDON_FOLDER = debug.getinfo(1,"S").source:sub(2,-37)
 _G.PUBLISH_DATA = LoadKeyValues(ADDON_FOLDER:sub(5,-16).."publish_data.txt") or {}
 _G.WORKSHOP_TITLE = PUBLISH_DATA.title or "Dota 2 but..."-- LoadKeyValues(debug.getinfo(1,"S").source:sub(7,-53).."publish_data.txt").title 
-_G.MAX_LEVEL = 30
+_G.MAX_LEVEL = 34
 
 _G.GameMode = _G.GameMode or class({})
 
@@ -31,6 +31,7 @@ softRequire("settings_butt")
 softRequire("settings_misc")
 softRequire("startitems")
 softRequire("thinker")
+softRequire("backdoor_protection")
 
 function Precache( context )
 	FireGameEvent("addon_game_mode_precache",nil)
@@ -38,6 +39,8 @@ function Precache( context )
 	PrecacheResource("particle", "particles/custom/generic_hit_blood.vpcf", context)
 	PrecacheResource("particle", "particles/custom/silencer_global_silence_dust_hit.vpcf", context)
 	PrecacheResource("particle", "particles/custom/generic_stunned_old.vpcf", context)
+	PrecacheResource("particle", "particles/econ/events/ti6/teleport_start_ti6_lvl3_rays.vpcf", context)
+	PrecacheResource("particle", "particles/econ/items/tinker/boots_of_travel/teleport_start_bots_ring.vpcf", context)
 	--[[
 		Precache things we know we'll use.  Possible file types include (but not limited to):
 			PrecacheResource( "model", "*.vmdl", context )

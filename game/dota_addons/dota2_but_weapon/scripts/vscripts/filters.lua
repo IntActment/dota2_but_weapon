@@ -35,8 +35,6 @@ function Filters:BountyRunePickupFilter(event)
 	return true
 end
 
-lastSay = Time();
-
 function Filters:DamageFilter(event)
 	-- PrintTable(event)
 	local attackerUnit = event.entindex_attacker_const and EntIndexToHScript(event.entindex_attacker_const)
@@ -46,36 +44,6 @@ function Filters:DamageFilter(event)
 
 	-- --  example
 		-- event.damage = 10
-		
-	if victimUnit:IsBuilding() then
-		if attackerUnit:IsBuilding() then
-			--print( "Towers cannot damege each other" )
-			
-			--Say( victimUnit, "Towers cannot hit each other", false )
-			
-			return false
-		end
-		
-		if attackerUnit:IsControllableByAnyPlayer() and ( victimUnit.canBeDamagedByHero ~= nil ) and ( not victimUnit.canBeDamagedByHero() ) then
-			--print( "this tower cannot be attacked by any controllable unit" )
-			if IsServer() then
-				if ( not victimUnit:HasModifier( "beinggrabbedmodifier" ) ) and ( not victimUnit:HasModifier( "beingtossedmodifier" ) ) and ( not victimUnit:HasModifier( "getsmackedmodifier" ) ) then
-					
-					local now_time = Time()
-					if now_time - lastSay > 2.0 then
-						lastSay = now_time
-						Say( victimUnit, "Only creeps can hurt me!", false )
-					end
-					
-					local nTargetFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_abaddon/abaddon_aphotic_shield_explosion.vpcf", PATTACH_ABSORIGIN_FOLLOW, victimUnit )
-					ParticleManager:SetParticleControlEnt( nTargetFX, 1, victimUnit, PATTACH_ABSORIGIN_FOLLOW, nil, victimUnit:GetCenter(), false )
-					ParticleManager:ReleaseParticleIndex( nTargetFX )
-				end
-			end
-			
-			return false
-		end
-	end
 
 	return true
 end

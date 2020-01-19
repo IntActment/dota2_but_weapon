@@ -70,7 +70,7 @@ function beingtossedmodifier:OnIntervalThink()
 	origin.z = grOrigin.z + hyp * 180.0 + 1
 
 	if not GridNav:IsBlocked( grOrigin ) and GridNav:IsTraversable( grOrigin ) then
-		grab_target:SetOrigin( origin )
+		grab_target:SetAbsOrigin( origin )
 	end
 	
 	local velocity = grab_target:GetAngles()
@@ -81,7 +81,7 @@ function beingtossedmodifier:OnIntervalThink()
 		
 	self.time_last = time_now
 	
-	GridNav:DestroyTreesAroundPoint( grab_target:GetOrigin(), grab_target:GetHullRadius() / 2, true )
+	GridNav:DestroyTreesAroundPoint( grab_target:GetAbsOrigin(), grab_target:GetHullRadius() / 2, true )
 	
 	local units = FindUnitsInRadius( 
 		self:GetCaster():GetTeamNumber(), 
@@ -101,7 +101,7 @@ function beingtossedmodifier:OnIntervalThink()
 			
 			local damage = {
 				victim = unit,
-				attacker = grab_target,
+				attacker = self:GetCaster(),
 				damage = self.damage,
 				damage_type = DAMAGE_TYPE_PHYSICAL,		
 				ability = self:GetAbility()

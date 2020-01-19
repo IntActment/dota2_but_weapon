@@ -78,6 +78,14 @@ function grabnpcability:OnSpellStart()
 	if isAlly then
 		grab_duration_basic = self:GetSpecialValueFor( "duration_ally" )
 	end
+	
+	--local mods = self.grab_target:FindAllModifiers()
+	--print( "modifiers on " .. self.grab_target:GetName() .. ":" )
+	--for k,v in pairs(mods) do
+	--	print( "- " .. v:GetName() )
+	--end
+	
+	self.grab_target:Interrupt()
 
 	-- now we add a modifier to the caster, that makes him grabbing the foe
 	self:GetCaster():AddNewModifier(

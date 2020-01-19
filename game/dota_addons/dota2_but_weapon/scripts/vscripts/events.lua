@@ -7,9 +7,6 @@ ListenToGameEvent("dota_player_killed",function(keys)
 
 end, nil)
 
-
-killedBuildings = killedBuildings or {}
-
 ListenToGameEvent("entity_killed", function(keys)
 	-- for k,v in pairs(keys) do	print("entity_killed",k,v) end
 	local attackerUnit = keys.entindex_attacker and EntIndexToHScript(keys.entindex_attacker)
@@ -18,11 +15,6 @@ ListenToGameEvent("entity_killed", function(keys)
 
 	if (killedUnit and killedUnit:IsRealHero()) then
 		-- when a hero dies
-	end
-	
-	if (killedUnit and killedUnit:IsBuilding()) then
-		killedBuildings[killedUnit:GetName()] = true
-		print("building killed: " .. tostring(#killedBuildings))
 	end
 
 end, nil)

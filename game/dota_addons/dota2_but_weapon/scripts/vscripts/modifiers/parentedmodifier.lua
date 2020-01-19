@@ -52,9 +52,7 @@ function parentedmodifier:OnCreated( kv )
 	self.grab_target.parent = CreateUnitByName("npc_dota_creature_building_parent", self.grab_target:GetCenter(), false, self.grab_target, self.grab_target, self.grab_target:GetTeamNumber())
 	self.grab_target.parent:AddNewModifier(self.grab_target.parent, nil, "modifier_out_of_game", {})
 	
-	self:AddParent()
-
-	
+	self:AddParent()	
 end
 
 function parentedmodifier:OnRefresh( kv )

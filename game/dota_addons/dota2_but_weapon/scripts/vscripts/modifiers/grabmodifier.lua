@@ -118,15 +118,12 @@ function grabmodifier:OnIntervalThink()
 	
 	local caster = self:GetCaster()	
 	
-	-- allowed only for ally units except buildings
-	if not self.isAlly or self.grab_target:IsBuilding() then
-		-- check for TP abuse
-		if ( self.init_pos - caster:GetAbsOrigin() ):Length2D() > self.break_distance then
-			print( "cancel grabbing" )
-			self:Destroy()
-			
-			return
-		end
+	-- check for TP abuse
+	if ( self.init_pos - caster:GetAbsOrigin() ):Length2D() > self.break_distance then
+		-- print( "cancel grabbing" )
+		self:Destroy()
+		
+		return
 	end
 	
 	if self:GetCaster():HasScepter() then
