@@ -5,7 +5,7 @@
 	{
 		"BaseClass"						"ability_lua"
 		"ScriptFile"					"abilities/grabnpcability"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_NONE"
 		"AbilityCastPoint"				"0.25"
 		"FightRecapLevel"				"1"

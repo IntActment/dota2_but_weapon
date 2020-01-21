@@ -83,9 +83,7 @@ function grabmodifier:OnDestroy()
 	
 	self:GetCaster():RemoveGesture( self.animation )
 
-	--if self:GetRemainingTime() <= 0 then
-		self:OnExpire()
-	--end
+	self.grab_target:RemoveModifierByName("parentedmodifier")
 	
 	ResetBeingGrabbed( self )
 	
@@ -106,12 +104,6 @@ function grabmodifier:RemoveOnDeath() return true end
 function grabmodifier:IsHidden() return false end 	-- we can hide the modifier
 function grabmodifier:IsDebuff() return false end 	-- make it red or green
 function grabmodifier:DestroyOnExpire() return true end
-
-function grabmodifier:OnExpire()
-	
-	self.grab_target:RemoveModifierByName("parentedmodifier")
-	
-end
 
 function grabmodifier:OnIntervalThink()
 	if IsClient() then return end
@@ -155,7 +147,8 @@ function grabmodifier:OnAttackLanded( params )
 	if params.attacker ~= self:GetParent() then return end -- do nothing
 	
 	local nTargetFX = ParticleManager:CreateParticle( "particles/custom/silencer_global_silence_dust_hit.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster() )
-	ParticleManager:SetParticleControlEnt( nTargetFX, 1, params.target, PATTACH_ABSORIGIN_FOLLOW, nil, params.target:GetAbsOrigin(), false )
+	ParticleManager:SetParticleControlEnt( nTargetFX, 0, params.target, PATTACH_ABSORIGIN_FOLLOW, nil, params.target:GetAbsOrigin(), false )
+	ParticleManager:DestroyParticle( nTargetFX, false )
 	ParticleManager:ReleaseParticleIndex( nTargetFX )
 	
 	if self:GetCaster():HasScepter() then
@@ -252,6 +245,7 @@ function grabmodifier:DeclareFunctions()
 		MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE,
 		MODIFIER_EVENT_ON_ATTACK_LANDED,
 		MODIFIER_EVENT_ON_ATTACK,
+		MODIFIER_EVENT_ON_STATE_CHANGED,
 	}
 
 	return funcs
@@ -270,4 +264,16 @@ end
 function grabmodifier:GetModifierBaseAttack_BonusDamage( params )
 	if IsClient() then return 0 end
 	return self.grab_target:GetHealth() * self.damage_increase / 100.0
+end
+
+function grabmodifier:OnStateChanged( params )
+	if IsClient() then return 0 end
+	
+	local parent = self:GetCaster()
+	if parent:IsStunned() or parent:IsMuted() or parent:IsNightmared() or parent:IsHexed() then
+		-- cancel on disable
+		self:Destroy()
+	end
+	
+	return 0
 end

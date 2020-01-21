@@ -132,7 +132,7 @@ function grabnpcability:GetCustomCastErrorTarget( hTarget )
 	if self.grab_result == 1 then
 		return "You can not grab yourself!"
 	elseif self.grab_result == 2 then
-		return "You can not grab ancient!"
+		return "You can not grab the ancient!"
 	end
 
 	return "I'm bored to do this"

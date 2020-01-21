@@ -15,22 +15,20 @@ function travelmodifier:GetAttributes()
 end
 
 function travelmodifier:OnCreated( kv )
-	if IsClient() then return 0 end	
+	if IsClient() then return end
 	
 	self.range = kv.range
-	self:SetStackCount( self.range )
-
+	
 	self.startPos = self:GetParent():GetAbsOrigin()
 	self.startAngles = self:GetParent():GetAngles()
 	
+	self:SetStackCount( self.range )
 	self.state = 0 -- idle
 
-	self:StartIntervalThink( 5 )	
+	self:StartIntervalThink( 5 )
 end
 
 function travelmodifier:OnDestroy()
-	if IsClient() then return 0 end
-
 	self:StartIntervalThink( -1 )
 end
 
@@ -44,8 +42,8 @@ function travelmodifier:OnIntervalThink()
 			self.state = 1
 			print( "unit " .. parent:GetName() .. " was moved too far, started TP" )
 
-			self.tpHereFX = ParticleManager:CreateParticle( "particles/econ/events/ti6/teleport_start_ti6_lvl3_rays.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent )
-			ParticleManager:SetParticleControlEnt( self.tpHereFX, 1, parent, PATTACH_ABSORIGIN_FOLLOW, nil, parent:GetOrigin(), false )
+			self.tpHereFX = ParticleManager:CreateParticle( "particles/econ/items/tinker/boots_of_travel/teleport_start_bots_ring.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent )
+			ParticleManager:SetParticleControlEnt( self.tpHereFX, 0, parent, PATTACH_ABSORIGIN_FOLLOW, nil, parent:GetOrigin(), false )
 			
 			self.tpThereFX = ParticleManager:CreateParticle( "particles/econ/items/tinker/boots_of_travel/teleport_start_bots_ring.vpcf", PATTACH_WORLDORIGIN, parent )
 			ParticleManager:SetParticleControl( self.tpThereFX, 0, self.startPos )
