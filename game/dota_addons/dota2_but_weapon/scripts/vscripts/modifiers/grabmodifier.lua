@@ -132,7 +132,7 @@ function grabmodifier:OnIntervalThink()
 	target_qangles[2] = weaponAngles[2] - 90
 	target_qangles[3] = weaponAngles[3]
 	
-	local newOrigin = SplineVectors( caster:GetAttachmentOrigin( self.weapon ), self.grab_target:GetOrigin(), self.rate )
+	local newOrigin = SplineVectors( caster:GetAttachmentOrigin( self.weapon ), self.grab_target:GetAbsOrigin(), self.rate )
 	
 	self.grab_target:SetOrigin( newOrigin )
 	self.grab_target:SetAngles( target_qangles[1], target_qangles[2], target_qangles[3] )
@@ -145,11 +145,6 @@ function grabmodifier:OnAttackLanded( params )
 	if IsClient() then return end
 
 	if params.attacker ~= self:GetParent() then return end -- do nothing
-	
-	local nTargetFX = ParticleManager:CreateParticle( "particles/custom/silencer_global_silence_dust_hit.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster() )
-	ParticleManager:SetParticleControlEnt( nTargetFX, 0, params.target, PATTACH_ABSORIGIN_FOLLOW, nil, params.target:GetAbsOrigin(), false )
-	ParticleManager:DestroyParticle( nTargetFX, false )
-	ParticleManager:ReleaseParticleIndex( nTargetFX )
 	
 	if self:GetCaster():HasScepter() then
 		if params.target ~= nil and params.target:GetTeamNumber() ~= self:GetParent():GetTeamNumber() then
@@ -203,34 +198,6 @@ function grabmodifier:OnAttack( params )
 		
 		
 		if self:GetStackCount() == 0 then
-		--[[
-			local aimPos = self:GetCursorPosition()
-			local tossStartPos = target:GetOrigin()
-			local caster = self:GetCaster()
-			
-			local mod = target:AddNewModifier(
-								caster,
-								self,
-								"beingtossedmodifier",
-								{
-									tossPointX = aimPos.x, 
-									tossPointY = aimPos.y, 
-									tossPointZ = aimPos.z,
-									tossFromX = tossStartPos.x, 
-									tossFromY = tossStartPos.y, 
-									tossFromZ = tossStartPos.z,
-									duration = dur,
-									damage = dam,
-									range = ran,
-								}
-			)
-			
-			if mod == nil then
-				print( "failed to add beingtossedmodifier" )
-			end
-			
-			caster:EmitSound("throw_1")
-			]]--
 			self:Destroy()
 		end
 	end

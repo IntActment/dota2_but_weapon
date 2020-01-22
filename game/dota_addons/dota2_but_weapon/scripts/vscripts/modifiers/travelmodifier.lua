@@ -24,6 +24,8 @@ function travelmodifier:OnCreated( kv )
 	
 	self:SetStackCount( self.range )
 	self.state = 0 -- idle
+	
+	--DebugDrawCircle( self.startPos, Vector( RandomInt(0, 255), RandomInt(0, 255), RandomInt(0, 255) ), 16, self.range, true, 200 )
 
 	self:StartIntervalThink( 5 )
 end
@@ -43,7 +45,7 @@ function travelmodifier:OnIntervalThink()
 			print( "unit " .. parent:GetName() .. " was moved too far, started TP" )
 
 			self.tpHereFX = ParticleManager:CreateParticle( "particles/econ/items/tinker/boots_of_travel/teleport_start_bots_ring.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent )
-			ParticleManager:SetParticleControlEnt( self.tpHereFX, 0, parent, PATTACH_ABSORIGIN_FOLLOW, nil, parent:GetOrigin(), false )
+			ParticleManager:SetParticleControlEnt( self.tpHereFX, 0, parent, PATTACH_ABSORIGIN_FOLLOW, nil, parent:GetAbsOrigin(), false )
 			
 			self.tpThereFX = ParticleManager:CreateParticle( "particles/econ/items/tinker/boots_of_travel/teleport_start_bots_ring.vpcf", PATTACH_WORLDORIGIN, parent )
 			ParticleManager:SetParticleControl( self.tpThereFX, 0, self.startPos )
@@ -63,7 +65,7 @@ function travelmodifier:OnIntervalThink()
 			ParticleManager:DestroyParticle( self.tpHereFX, false )
 			ParticleManager:DestroyParticle( self.tpThereFX, false )
 			
-			parent:EmitSound("outpost_capture_notify")
+			--parent:EmitSound("outpost_capture_notify")
 			
 			parent:SetAbsOrigin( self.startPos )
 			parent:SetAngles( self.startAngles.x, self.startAngles.y, self.startAngles.z )

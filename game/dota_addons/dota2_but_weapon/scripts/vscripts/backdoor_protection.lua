@@ -246,8 +246,8 @@ function backdoor_protection:DamageFilter(event)
 					end
 					
 					local nTargetFX = ParticleManager:CreateParticle( "particles/units/heroes/hero_abaddon/abaddon_aphotic_shield_explosion.vpcf", PATTACH_ABSORIGIN_FOLLOW, victimUnit )
-					ParticleManager:SetParticleControlEnt( nTargetFX, 1, victimUnit, PATTACH_ABSORIGIN_FOLLOW, nil, victimUnit:GetCenter(), false )
-					ParticleManager:DestroyParticle( nTargetFX, false )
+					ParticleManager:SetParticleControlEnt( nTargetFX, 0, victimUnit, PATTACH_ABSORIGIN_FOLLOW, nil, victimUnit:GetCenter(), false )
+					--ParticleManager:DestroyParticle( nTargetFX, false )
 					ParticleManager:ReleaseParticleIndex( nTargetFX )
 				end
 			end

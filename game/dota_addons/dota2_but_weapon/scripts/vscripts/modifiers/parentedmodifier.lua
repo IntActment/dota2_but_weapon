@@ -94,9 +94,8 @@ function parentedmodifier:OnDestroy()
 	
 	self:RemoveParent()
 	
-	ResolveNPCPositions( self.grab_target:GetOrigin(), 100 )
-	
-	FindClearSpaceForUnit( self.grab_target, self.grab_target:GetOrigin(), true )
+	FindClearSpaceForUnit( self.grab_target, self.grab_target:GetAbsOrigin(), true )
+	ResolveNPCPositions( self.grab_target:GetAbsOrigin(), 100 )	
 	
 	self.grab_target.parent:Destroy()
 	self.grab_target.parent = nil

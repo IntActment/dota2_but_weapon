@@ -39,7 +39,7 @@ function tossnpcability:OnSpellStart()
 		
 		g_modifier:Destroy()
 		
-		local tossStartPos = target:GetOrigin()
+		local tossStartPos = target:GetAbsOrigin()
 		
 		target:Interrupt()
 		
