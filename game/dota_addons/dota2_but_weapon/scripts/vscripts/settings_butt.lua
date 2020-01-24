@@ -39,7 +39,8 @@ BUTTINGS = {
 	BUYBACK_RULES = 0,                  -- 0 = normal, 1 = use buyback restrictions
 	BUYBACK_LIMIT = 1,                  -- Max amount of buybacks
 	BUYBACK_COOLDOWN = 600,             -- Cooldown for buyback
-
+	
+	GNT_BEHAVIOR = 1,					-- Grab'n'Toss tower teleporting behavior
 }
 
 function BUTTINGS.ALTERNATIVE_XP_TABLE()	-- xp values if MAX_LEVEL is different than 30

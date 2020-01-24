@@ -27,7 +27,7 @@ function getsmackedmodifier:OnCreated( kv )
 	self:SetDuration( 2.5, false )
 	
 	self.grab_target:RemoveGesture( ACT_DOTA_FLAIL )
-	self.grab_target:StartGestureWithPlaybackRate( ACT_DOTA_DIE, 1.0 )
+	self.grab_target:StartGestureWithPlaybackRate( ACT_DOTA_DIE, 1.8 )
 	
 	self.grab_target:EmitSound("drop_1")
 

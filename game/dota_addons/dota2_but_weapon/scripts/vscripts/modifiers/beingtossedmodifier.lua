@@ -27,8 +27,16 @@ function beingtossedmodifier:OnCreated( kv )
 	self.duration = kv.duration
 	self.damage = kv.damage
 	self.range = kv.range
-
-	self.tossPoint = self.tossStart + ( self.tossPoint - self.tossStart ):Normalized() * self.range
+	
+	local distance = ( self.tossPoint - self.tossStart ):Length2D()
+	
+	local ddist = 350
+	
+	if distance < ddist then
+		self.tossPoint = self.tossStart + ( self.tossPoint - self.tossStart ):Normalized() * ddist
+	elseif distance > self.range then
+		self.tossPoint = self.tossStart + ( self.tossPoint - self.tossStart ):Normalized() * self.range
+	end
 	
 	self.time_last = Time()
 	self.time_start = self.time_last
@@ -85,7 +93,7 @@ function beingtossedmodifier:OnIntervalThink()
 	
 	local units = FindUnitsInRadius( 
 		self:GetCaster():GetTeamNumber(), 
-		grab_target:GetOrigin(),
+		grab_target:GetAbsOrigin(),
 		grab_target,
 		grab_target:GetHullRadius() + 50,
 		DOTA_UNIT_TARGET_TEAM_BOTH,
