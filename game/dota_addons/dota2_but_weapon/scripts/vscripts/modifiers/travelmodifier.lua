@@ -31,6 +31,19 @@ function travelmodifier:GetAttributes()
 		+ MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE -- Allows modifier to be assigned to invulnerable entities. 
 end
 
+function travelmodifier:GetComparePos()
+	if butts.GNT_BEHAVIOR == 1 then
+		return self.startPos
+		
+	elseif butts.GNT_BEHAVIOR == 2 then
+		if self.hFountain and self.hFountain:IsAlive() and not self.hFountain.HasDied then
+			return self.hFountain:GetAbsOrigin()
+		else
+			return nil
+		end
+	end
+end
+
 function travelmodifier:OnCreated( kv )
 	if IsClient() then return end
 	
@@ -42,24 +55,18 @@ function travelmodifier:OnCreated( kv )
 	self.startPos = parent:GetAbsOrigin()
 	self.startAngles = parent:GetAngles()
 	
-	if butts.GNT_BEHAVIOR == 1 then
-		self.checkPos = self.startPos
-		print ("beh1")
-		
-	elseif butts.GNT_BEHAVIOR == 2 then
-		print ("beh2")
-		local hFountain = nil
+	if butts.GNT_BEHAVIOR == 2 then
+		self.hFountain = nil
 		local nTeam = parent:GetTeamNumber()
 		
 		if nTeam == DOTA_TEAM_GOODGUYS then
-			hFountain = Entities:FindByName( nil, "ent_dota_fountain_good" )
+			self.hFountain = Entities:FindByName( nil, "ent_dota_fountain_good" )
 			
 		elseif nTeam == DOTA_TEAM_BADGUYS then
-			hFountain = Entities:FindByName( nil, "ent_dota_fountain_bad" )
+			self.hFountain = Entities:FindByName( nil, "ent_dota_fountain_bad" )
 			
 		end
 		
-		self.checkPos = hFountain:GetAbsOrigin()
 		self.range = 1500
 	end
 	
@@ -85,11 +92,18 @@ end
 function travelmodifier:OnIntervalThink()
 	if IsClient() then return end
 	
+	local checkPos = self:GetComparePos()
+	
+	if checkPos == nil then		
+		self:Destroy()
+		return
+	end
+	
 	local parent = self:GetParent()
 	self.hParentModifier = parent:FindModifierByName( "parentedmodifier" )
 	
 	if self.state == 0 then
-		local needToTpBack = ( self.checkPos - parent:GetAbsOrigin() ):Length2D() > self.range
+		local needToTpBack = ( checkPos - parent:GetAbsOrigin() ):Length2D() > self.range
 		
 		if butts.GNT_BEHAVIOR == 2 then
 			needToTpBack = not needToTpBack
@@ -145,6 +159,9 @@ function travelmodifier:DrawCircle( inRange )
 	if IsClient() then return end
 	
 	local player = nil
+	local checkPos = self:GetComparePos()
+	
+	if checkPos == nil then return end
 	
 	if self.hParentModifier then	
 		player = PlayerResource:GetPlayer( self.hParentModifier:GetCaster():GetPlayerID() )
@@ -157,7 +174,7 @@ function travelmodifier:DrawCircle( inRange )
 
 		self.circleFX = ParticleManager:CreateParticleForPlayer( self.circle_part, PATTACH_CUSTOMORIGIN, parent, player )
 
-		ParticleManager:SetParticleControl( self.circleFX, 0, self.checkPos )
+		ParticleManager:SetParticleControl( self.circleFX, 0, checkPos )
 		
 		if inRange then
 			ParticleManager:SetParticleControl( self.circleFX, 1, Vector( 0, 128, 255 ) )	-- green circle

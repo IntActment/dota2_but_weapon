@@ -40,8 +40,62 @@ BUTTINGS = {
 	BUYBACK_LIMIT = 1,                  -- Max amount of buybacks
 	BUYBACK_COOLDOWN = 600,             -- Cooldown for buyback
 	
-	GNT_BEHAVIOR = 1,					-- Grab'n'Toss tower teleporting behavior
+	GNT_BEHAVIOR = 2,									-- Grab'n'Toss tower teleporting behavior
+	GNT_FOUNTAIN = "GrabDisabled",      				-- Grab'n'Toss enable fountain grabbing (GrabDisabled, GrabAllyOnly, GrabBoth)
+	GNT_TP_UNITS = 0,                   				-- Grab'n'Toss enable teleporting with grabbed units
+		GNT_TP_HEROES = "TpHeroesDisabled",           	-- Grab'n'Toss enable teleporting with grabbed buildings (TpHeroesDisabled, TpHeroesAllyOnly, TpHeroesBoth)
+		GNT_TP_BUILDINGS = "TpBuildingsDisabled",       -- Grab'n'Toss enable teleporting with grabbed buildings (TpBuildingsDisabled, TpBuildingsAllyOnly, TpBuildingsBoth)
+		GNT_TP_FOUNTAIN = "TpFountainDisabled",         -- Grab'n'Toss enable teleporting with grabbed fountain (TpFountainDisabled, TpFountainAllyOnly, TpFountainBoth)
+	GNT_DAMAGE_TOWER = 0,								-- Grab'n'Toss enable towers dealing damage to buildings
+	GNT_DAMAGE_FOUNTAIN = 0,							-- Grab'n'Toss enable fountain dealing damage to buildings
 }
+
+local butts = BUTTINGS
+
+function BUTTINGS.CanGrabAllyFountain()
+	return ( butts.GNT_FOUNTAIN == "GrabAllyOnly" )
+end
+
+function BUTTINGS.CanGrabAnyFountain()
+	return ( butts.GNT_FOUNTAIN == "GrabBoth" )
+end
+
+function BUTTINGS.CanTowersDamageBuildings()
+	return ( butts.GNT_DAMAGE_TOWER == 1 )
+end
+
+function BUTTINGS.CanFountainDamageBuildings()
+	return ( butts.GNT_DAMAGE_FOUNTAIN == 1 )
+end
+
+function BUTTINGS.CanTeleportUnits()
+	return ( butts.GNT_TP_UNITS == 1 )
+end
+
+function BUTTINGS.CanTeleportAllyHeroes()
+	return ( butts.GNT_TP_UNITS == 1 ) and ( butts.GNT_TP_HEROES == "TpHeroesAllyOnly" )
+end
+
+function BUTTINGS.CanTeleportAnyHeroes()
+	return ( butts.GNT_TP_UNITS == 1 ) and ( butts.GNT_TP_HEROES == "TpHeroesBoth" )
+end
+
+function BUTTINGS.CanTeleportAllyBuildings()
+	return ( butts.GNT_TP_UNITS == 1 ) and ( butts.GNT_TP_BUILDINGS == "TpBuildingsAllyOnly" )
+end
+
+function BUTTINGS.CanTeleportAnyBuildings()
+	return ( butts.GNT_TP_UNITS == 1 ) and ( butts.GNT_TP_BUILDINGS == "TpBuildingsBoth" )
+end
+
+function BUTTINGS.CanTeleportAllyFountain()
+	return ( butts.GNT_TP_UNITS == 1 ) and ( butts.GNT_TP_FOUNTAIN == "TpFountainAllyOnly" )
+end
+
+function BUTTINGS.CanTeleportAnyFountain()
+	return ( butts.GNT_TP_UNITS == 1 ) and ( butts.GNT_TP_FOUNTAIN == "TpFountainBoth" )
+end
+
 
 function BUTTINGS.ALTERNATIVE_XP_TABLE()	-- xp values if MAX_LEVEL is different than 30
 	local ALTERNATIVE_XP_TABLE = {		

@@ -12,6 +12,16 @@ if (!IsHost) {
 	$("#SettingsBody").enabled=false;
 }
 
+function updateDisabled() {
+	$('#GNT_TP_UNITS_PANEL').enabled = $('#GNT_TP_UNITS').checked
+	$('#GNT_TP_FOUNTAIN').enabled = ( $('#GNT_FOUNTAIN').GetSelected().id !== "GrabDisabled" ) && $('#GNT_TP_UNITS').checked
+	$('#GNT_TP_FOUNTAIN_LABEL').enabled = ( $('#GNT_FOUNTAIN').GetSelected().id !== "GrabDisabled" ) && $('#GNT_TP_UNITS').checked
+	$('#GNT_TP_BUILDINGS').enabled = $('#GNT_TP_UNITS').checked
+	$('#GNT_TP_BUILDINGS_LABEL').enabled = $('#GNT_TP_UNITS').checked
+	$('#GNT_TP_HEROES').enabled = $('#GNT_TP_UNITS').checked
+	$('#GNT_TP_HEROES_LABEL').enabled = $('#GNT_TP_UNITS').checked
+}
+
 function uniqueID() {
 	var uniqueID_lalala = uniqueID_lalala || 1;
 	let out;
@@ -94,6 +104,11 @@ CustomNetTables.SubscribeNetTableListener("butt_settings", function(t,k,kv) {
 
 		banning = ($("#HERO_BANNING").checked);
 		allPick = ("AP"===$("#GAME_MODE").GetSelected().id);
+		
+		$("#SettingsBody").ScrollToLeftEdge();
+		$("#SettingsBody").ScrollToTop();
+		
+		$("#SettingsBody").SetHasClass("SettingsBodyInsideSideBar", true);
 
 		for (let i = 0; i < $("#SettingsBody").GetChildCount(); i++) {
 			$("#SettingsBody").GetChild(i).SetHasClass("SettingsGroupInsideSideBar", true);
@@ -108,7 +123,7 @@ CustomNetTables.SubscribeNetTableListener("butt_settings", function(t,k,kv) {
 
 ////////////////////////////////////////////////////////////
 
-function onPanelChange(name, value) {
+function onPanelChange(name, addValue) {
 	if (!IsHost) {
 		return;
 	}
@@ -116,7 +131,7 @@ function onPanelChange(name, value) {
 	
 	if (!panel)
 	{
-		panel = $("#"+name + value);		
+		panel = $("#"+name + addValue);		
 	}
 	
 	if (!panel) {
@@ -130,7 +145,7 @@ function onPanelChange(name, value) {
 	} else if ("ToggleButton"===panelType) {
 		val = panel.checked;
 	} else if ("RadioButton"===panelType) {
-		val = parseInt(value);
+		val = parseInt(addValue);
 		if (isNaN(val)){
 			val = 0;
 		}		

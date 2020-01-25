@@ -35,6 +35,9 @@ end
 
 
 -------------------------------------------------------------------------------------------------------------------------------
+
+local butts = BUTTINGS
+
 grabnpcability = class({})
 
 function grabnpcability:OnAbilityPhaseStart()
@@ -122,6 +125,22 @@ function grabnpcability:CastFilterResultTarget( hTarget )
 	elseif self.grab_target:IsFort() then
 		self.grab_result = 2
 		return UF_FAIL_CUSTOM
+	elseif butts.CanGrabAllyFountain() or butts.CanGrabAnyFountain() then
+		local team = -1
+		if hTarget:GetName() == "ent_dota_fountain_good" then
+			team = DOTA_TEAM_GOODGUYS
+		elseif hTarget:GetName() == "ent_dota_fountain_bad" then
+			team = DOTA_TEAM_BADGUYS
+		end
+		
+		if team ~= -1 then
+			-- its a fountain
+			if butts.CanGrabAllyFountain() and team ~= caster:GetTeamNumber() then
+				-- cannot grab enemy fountain
+				self.grab_result = 3
+				return UF_FAIL_CUSTOM
+			end
+		end
 	end
 
 	return UF_SUCCESS
@@ -133,6 +152,8 @@ function grabnpcability:GetCustomCastErrorTarget( hTarget )
 		return "You can not grab yourself!"
 	elseif self.grab_result == 2 then
 		return "You can not grab the ancient!"
+	elseif self.grab_result == 3 then
+		return "You can not grab enemy fountain!"
 	end
 
 	return "I'm bored to do this"

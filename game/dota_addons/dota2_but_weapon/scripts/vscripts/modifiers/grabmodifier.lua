@@ -105,13 +105,50 @@ function grabmodifier:IsHidden() return false end 	-- we can hide the modifier
 function grabmodifier:IsDebuff() return false end 	-- make it red or green
 function grabmodifier:DestroyOnExpire() return true end
 
+local butts = BUTTINGS
+
+function grabmodifier:IsTeleportAllowed( hCaster, hUnit )
+	if hUnit:IsHero() then
+		if ( butts.CanTeleportAnyHeroes() ) or 
+			( butts.CanTeleportAllyHeroes() and hUnit:GetTeamNumber() == hCaster:GetTeamNumber() ) then
+			-- do nothing, it's legal
+			--print( "teleporting hero ok" )
+		else
+			--print( "teleporting hero fail" )
+			return false
+		end
+	elseif hUnit:IsFountain() then
+		if ( butts.CanTeleportAnyFountain() ) or 
+			( butts.CanTeleportAllyFountain() and hUnit:GetTeamNumber() == hCaster:GetTeamNumber() ) then
+			-- do nothing, it's legal
+			--print( "teleporting fountain ok" )
+		else
+			--print( "teleporting fountain fail" )
+			return false
+		end
+	elseif hUnit:IsBuilding() then
+		if ( butts.CanTeleportAnyBuildings() ) or 
+			( butts.CanTeleportAllyBuildings() and hUnit:GetTeamNumber() == hCaster:GetTeamNumber() ) then
+			-- do nothing, it's legal
+			--print( "teleporting Building ok" )
+		else
+			--print( "teleporting Building fail" )
+			return false
+		end
+	end
+	
+	--print( "teleporting shit ok" )
+	
+	return true
+end
+
 function grabmodifier:OnIntervalThink()
 	if IsClient() then return end
 	
 	local caster = self:GetCaster()	
 	
 	-- check for TP abuse
-	if ( self.init_pos - caster:GetAbsOrigin() ):Length2D() > self.break_distance then
+	if ( self.init_pos - caster:GetAbsOrigin() ):Length2D() > self.break_distance and not self:IsTeleportAllowed( caster, self.grab_target ) then
 		-- print( "cancel grabbing" )
 		self:Destroy()
 		

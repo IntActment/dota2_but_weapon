@@ -1,7 +1,15 @@
 
 local backdoor_protection = class ({})
 
+local butts = BUTTINGS
+
 LinkLuaModifier("travelmodifier", "modifiers/travelmodifier", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("outofgamemodifier", "modifiers/outofgamemodifier", LUA_MODIFIER_MOTION_NONE)
+
+function CDOTA_BaseNPC:IsFountain()
+	return self:GetName() == "ent_dota_fountain_good" or self:GetName() == "ent_dota_fountain_bad"
+end
+
 
 local killedBuildings = {}
 
@@ -22,7 +30,26 @@ ListenToGameEvent("entity_killed", function(keys)
 	if (killedUnit and killedUnit:IsBuilding()) then
 		killedBuildings[killedUnit:GetName()] = true
 	end
+	
+	if killedUnit:IsFountain() then
+		-- emulate fountain killing ()
+		killedUnit.HasDied = true
+		killedUnit:SetUnitCanRespawn( true )
+		killedUnit:RespawnUnit()		
+	end
 
+end, nil)
+
+ListenToGameEvent("npc_spawned", function(keys)
+	-- for k,v in pairs(keys) do print("npc_spawned",k,v) end
+	local spawnedUnit = keys.entindex and EntIndexToHScript(keys.entindex)
+	
+	if spawnedUnit.HasDied then
+		
+		spawnedUnit:AddNewModifier(spawnedUnit, nil, "outofgamemodifier", {})
+		
+	end
+	
 end, nil)
 
 
@@ -122,6 +149,13 @@ backdoor_protection.props = {
 
 function backdoor_protection:OnGameStarted()
 	print("backdoor_protection: game started")
+	
+	if butts.CanGrabAllyFountain() or butts.CanGrabAnyFountain() then
+		-- remove invulnerability from the fountains
+		Entities:FindByName( nil, "ent_dota_fountain_good" ):SetInvulnCount( 0 )
+		Entities:FindByName( nil, "ent_dota_fountain_bad" ):SetInvulnCount( 0 )
+	end
+	
 	
 	for buildingName,props in pairs(backdoor_protection.props) do
 		local hBuilding = Entities:FindByName( nil, buildingName )
@@ -225,11 +259,13 @@ function backdoor_protection:DamageFilter(event)
 	
 	if victimUnit:IsBuilding() then
 		if attackerUnit:IsBuilding() then
-			--print( "Towers cannot damege each other" )
-			
-			--Say( victimUnit, "Towers cannot hit each other", false )
-			
-			return false
+			if ( attackerUnit:IsTower() and butts.CanTowersDamageBuildings() )
+				or ( attackerUnit:IsFountain() and butts.CanFountainDamageBuildings() ) then
+					-- do nothing, it's legal
+			else
+				-- not allowed due to current settings
+				return false
+			end
 		end
 		
 		if attackerUnit:IsControllableByAnyPlayer() and ( victimUnit.canBeDamagedByHero ~= nil ) and ( not victimUnit.canBeDamagedByHero() ) then

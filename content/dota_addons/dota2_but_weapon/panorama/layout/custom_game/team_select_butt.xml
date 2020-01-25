@@ -12,7 +12,7 @@
 						<Label class="SettingsTitle" text="GAME SETTINGS"/>
 						<Label class="SettingsSubtitle" text="HOST" id="Host"/>
 						<!-- <Panel class="SplitThree"> -->
-						<Panel id="SettingsBody" class="SettingsBody" enabled="false" hittest="false">
+						<Panel id="SettingsBody" class="SettingsBody" enabled="false" hittest="true">
 								<Panel class="SettingsGroup w-31">
 										<Label class="SettingsGroupTitle" text="Gamemode"/>
 										<!-- <Label class="SettingsItem" text="Ban"/>
@@ -91,6 +91,9 @@
 																	onactivate="onPanelChange('NO_UPHILL_MISS')"/>
 										<ToggleButton id="TOMBSTONE" class="SettingsItem" text="Revival Tombstone"
 																	onactivate="onPanelChange('TOMBSTONE')"/>
+									</Panel>
+									<Panel class="SettingsGroup w-31">
+										<Label class="SettingsGroupTitle" text="Butt Exclusive"/>
 										<Panel class="SettingsItem TextEntryFrame">
 												<TextEntry onfocus="onfocus('XP_PER_MINUTE')" oninputsubmit="onPanelChange('XP_PER_MINUTE')"
 																	 onblur="onPanelChange('XP_PER_MINUTE')" id="XP_PER_MINUTE" class="SettingsItem"
@@ -162,20 +165,7 @@
 												<Label text="Cooldown" class="TextEntryLabel"/>
 										</Panel>
 								</Panel>
-								<Panel class="SettingsGroup w-31 ModePanel">
-										<Label class="SettingsGroupTitle SettingsGroupFull" text="Grab'n'Toss tweaks"/>
-										<Panel class="SettingsGroup SettingsGroupFull ModePanel">
-											<Label class="SettingsGroupTitle" text="Tower movement limitation"/>
-											<Panel class="Horz">
-												<RadioButton class="SettingsItem Fill" id="GNT_BEHAVIOR1" text="By distance" onactivate="onPanelChange('GNT_BEHAVIOR', '1')" group="GNT_BEHAVIOR"/>
-												<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower1')" onmouseout="DOTAHideTextTooltip()"/>
-											</Panel>
-											<Panel class="Horz">
-												<RadioButton class="SettingsItem Fill" id="GNT_BEHAVIOR2" text="Exclude fountain areas only" onactivate="onPanelChange('GNT_BEHAVIOR', '2')" group="GNT_BEHAVIOR"/>
-												<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower2')" onmouseout="DOTAHideTextTooltip()"/>
-											</Panel>
-										</Panel>
-								</Panel>
+								
 								<Panel class="SettingsGroup w-31">
 										<!-- <Button id="CHEAT_QUICK" class="SettingsItem ButtonBevel" onactivate="onPanelChange('CHEAT_QUICK')"><Label text="Quick Start" /></Button> -->
 										<Button id="RESET" class="SettingsItem ButtonBevel" onactivate="onPanelChange('RESET')">
@@ -218,6 +208,84 @@
 								<!-- <RadioButton class="SettingsElementBody" text="asd"/> -->
 								<!-- <RadioButton class="SettingsElementBody" text="asd"/> -->
 								<!-- </Panel> -->
+								
+
+								<Panel class="SettingsGroup w-31 ModePanel">
+									<Label class="SettingsGroupTitle" text="Tower movement limitation"/>
+									<Panel class="Horz">
+										<RadioButton class="SettingsItem Fill" id="GNT_BEHAVIOR1" text="By distance" onactivate="onPanelChange('GNT_BEHAVIOR', '1')" group="GNT_BEHAVIOR"/>
+										<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower1')" onmouseout="DOTAHideTextTooltip()"/>
+									</Panel>
+									<Panel class="Horz">
+										<RadioButton class="SettingsItem Fill" id="GNT_BEHAVIOR2" text="Exclude fountain areas only" onactivate="onPanelChange('GNT_BEHAVIOR', '2')" group="GNT_BEHAVIOR"/>
+										<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower2')" onmouseout="DOTAHideTextTooltip()"/>
+									</Panel>
+								</Panel>
+								
+								<Panel class="SettingsGroup w-31 ModePanel">
+									
+									<Label class="SettingsGroupTitle" text="Allow dealing damage to other buildings"/>
+
+									<Panel class="Horz">										
+										<ToggleButton class="SettingsItem Fill" id="GNT_DAMAGE_TOWER" text="By towers" onactivate="onPanelChange('GNT_DAMAGE_TOWER')"/>
+										<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower3')" onmouseout="DOTAHideTextTooltip()"/>
+									</Panel>
+									<Panel class="Horz">										
+										<ToggleButton class="SettingsItem Fill" id="GNT_DAMAGE_FOUNTAIN" text="By fountains" onactivate="onPanelChange('GNT_DAMAGE_FOUNTAIN')"/>
+										<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower4')" onmouseout="DOTAHideTextTooltip()"/>
+									</Panel>
+								</Panel>
+								
+								<Panel class="SettingsGroup w-31 ModePanel">
+									
+									<Panel class="Horz">
+										<Label class="SettingsGroupTitle" text="Fountain grabbing"/>
+										<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower5')" onmouseout="DOTAHideTextTooltip()"/>
+									</Panel>											
+									<DropDown class="SettingsItem" id="GNT_FOUNTAIN" oninputsubmit="onPanelChange('GNT_FOUNTAIN'); updateDisabled();">
+										<Label text="Disabled" id="GrabDisabled"/>
+										<Label text="Ally fountain only" id="GrabAllyOnly"/>
+										<Label text="Both ally and enemy fountains" id="GrabBoth"/>
+									</DropDown>
+									
+								</Panel>
+								
+								<Panel class="SettingsGroup w-31 ModePanel">
+								
+								<Label class="SettingsGroupTitle" text="Teleportation"/>
+									<Panel class="Horz">
+										<ToggleButton class="SettingsItem" id="GNT_TP_UNITS" text="Enable unit teleportation" onactivate="onPanelChange('GNT_TP_UNITS'); updateDisabled();"/>
+										<Label class="Question Fill" text="?" onmouseover="DOTAShowTextTooltip('#DOTA_Tooltip_tower6')" onmouseout="DOTAHideTextTooltip()"/>
+									</Panel>
+									
+									
+									<Panel id="GNT_TP_UNITS_PANEL" class="SettingsGroupFull ModePanel" onload="updateDisabled()">
+									
+										<Label id="GNT_TP_HEROES_LABEL" class="SettingsGroupTitle" text="Hero teleportation"/>
+										<DropDown class="SettingsItem" id="GNT_TP_HEROES" oninputsubmit="onPanelChange('GNT_TP_HEROES')">
+											<Label text="Disabled" id="TpHeroesDisabled"/>
+											<Label text="Ally heroes only" id="TpHeroesAllyOnly"/>
+											<Label text="Both ally and enemy heroes" id="TpHeroesBoth"/>
+										</DropDown>
+										
+										<Label id="GNT_TP_BUILDINGS_LABEL" class="SettingsGroupTitle" text="Building teleportation"/>
+										<DropDown class="SettingsItem" id="GNT_TP_BUILDINGS" oninputsubmit="onPanelChange('GNT_TP_BUILDINGS')">
+											<Label text="Disabled" id="TpBuildingsDisabled"/>
+											<Label text="Ally buildings only" id="TpBuildingsAllyOnly"/>
+											<Label text="Both ally and enemy buildings" id="TpBuildingsBoth"/>
+										</DropDown>
+										
+										<Label id="GNT_TP_FOUNTAIN_LABEL" class="SettingsGroupTitle" text="Fountain teleportation"/>
+										<DropDown class="SettingsItem" id="GNT_TP_FOUNTAIN" oninputsubmit="onPanelChange('GNT_TP_FOUNTAIN')">
+											<Label text="Disabled" id="TpFountainDisabled"/>
+											<Label text="Ally fountain only" id="TpFountainAllyOnly"/>
+											<Label text="Both ally and enemy fountains" id="TpFountainBoth"/>
+										</DropDown>
+										
+									</Panel>
+									
+								</Panel>
+								
 						</Panel>
 				</Panel>
 				<Panel id="ItemEditor" class="CustomSettings v-coll">
